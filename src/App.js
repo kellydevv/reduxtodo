@@ -1,34 +1,39 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { minusOne, plusOne } from "./redux/modules/counter";
+import React,{useState} from "react";
+import { useSelector,useDispatch } from "react-redux";
+import { addNumber,minusNumber } from "./redux/modules/counter";
 
 const App = () => {
+  //1. dispatch사용하기 위해 선언
   const dispatch = useDispatch();
-  const number = useSelector((state) => state.counter.number);
-  console.log(number);
+  const [number, setNumber] = useState(0);
+  const globalNumber = useSelector((state) => state.counter.number);
+
+  const onChangeHandler = (event) => {
+    const { value } = event.target;
+    // event.target.value는 문자열 입니다.
+    // 이것을 숫자형으로 형변환해주기 위해서 +를 붙여 주었습니다.
+    setNumber(+value);
+  };
+
+//2. 더하기 버튼을 눌렀을 때 실행할 이벤트핸들러 만들기
+  const onClickAddNUmberHandler =() => {
+    //5. action creator를 dispatch해주고, 그때 action creator의 인자에 number넣어주기
+    dispatch(addNumber(number));
+  };
+
+  const onClickMinusNumberHandler =() =>{
+    dispatch(minusNumber(number));
+  };
+
+
+
   return (
     <div>
-      {number}
-      <button
-        onClick={() => {
-          // 마우스를 클릭했을 때 dispatch가 실행되고, ()안에 있는 액션객체가 리듀서로 전달된다.
-          //{type:""}은 dispatch의 key(리듀서가 보는게 이거임)
-          // export한 action  creator로 변경한다
-          dispatch(plusOne());
-        }}
-      >
-        {" "}
-        +1{" "}
-      </button>
-      <button
-        onClick={() => {
-          //dispatch({type:""})이지만 action creator를 만들었으므로 
-          //{type:"PLUS_ONE"}=== plusOne()
-          dispatch(minusOne());
-        }}
-      >
-        -1
-      </button>
+      <div>{globalNumber}</div>
+      <input type="number" onChange={onChangeHandler} />
+{/* 3. 더하기 버튼 이벤트핸들러 연결 */}
+      <button onClick={onClickAddNUmberHandler}>더하기</button>
+      <button onClick={onClickMinusNumberHandler}>빼기</button>
     </div>
   );
 };
