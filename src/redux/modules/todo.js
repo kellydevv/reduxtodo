@@ -26,7 +26,7 @@ const initialState = {
 };
 
 // Reducer
-const counter = (state = initialState,action) => {
+const todos = (state = initialState,action) => {
 switch(action.type) {
       case ADD_NUMBER:
             return{
@@ -43,4 +43,4 @@ switch(action.type) {
 };
 
 // export default reducer
-export default counter;
+export default todos;
