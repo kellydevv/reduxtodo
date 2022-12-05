@@ -1,46 +1,98 @@
-//payload가 필요한 action creator에서는 함수를 선언할 때 매개변수 자리에 payload를 넣어줘야 한다.
-//action creator를 사용하는 컴포넌트에서 리듀서로 보내고자 하는 payload를 인자로 넣어줘야 하기 때문에
-
 // Action Value
-const ADD_NUMBER = "ADD_NUMBER";
-const MINUS_NUMBER = "MINUS_NUMBER";
+const ADD_TODO= "ADD_TODO";
+const GET_TODO_BY_ID = "GET_TODO_BY_ID";
+const DELETE_TODO = "DELETE_TODO";
+const TOGGLE_STATUS_TODO = "TOGGLE_STATUS_TODO";
 
-//인자로 payload를 넣어줌으로써 action creator가 액션객체를 생성할 때 payload를 같이 담아 생성하는 원리이다.
 // Action Creator
-export const addNumber = (payload) => {
-  return {
-    type: ADD_NUMBER,
-    payload,
-  };
+//todo를 추가하는 action creator
+export const addTodo = (payload) => {
+      return {
+            type:ADD_TODO,
+            payload,
+      };
 };
 
-export const minusNumber = (payload) => {
+//todo를 지우는 action creator
+export const deleteTodo = (payload) => {
       return {
-            type: MINUS_NUMBER,
+            type: DELETE_TODO,
             payload,
-      }
-}
+      };
+};
+
+//todo의 isDone을 변경하는 action creator
+export const toggleStatusTodo  = (payload) => {
+      return {
+            type: TOGGLE_STATUS_TODO,
+            payload,
+      };
+};
+
+//상세페이지에서 특정 todo만 조회하는 action creator
+export const getTodoByID = (payload) => {
+      return {
+            type: GET_TODO_BY_ID,
+            payload,
+      };
+      };
 // Initial State
 const initialState = {
-      number:0
+      todos: [
+            {
+                  id:"1",
+                  title:"리덕스",
+                  body: "study redux",
+                  isDone: false,
+            },
+      ],
+      todo: {
+            id:"0",
+            title:"",
+            body:"",
+            isDone:false,
+      },
 };
 
 // Reducer
-const todos = (state = initialState,action) => {
-switch(action.type) {
-      case ADD_NUMBER:
-            return{
-// state.number (기존의 nubmer)에 action.paylaod(유저가 더하길 원하는 값)을 더한다.
-                  number:state.number +action.payload,
-            };
-            case MINUS_NUMBER: 
-            return {
-                  number: state.number - action.payload,
-            }
-      default:
-            return state;
-}
-};
+const todos = (state=initialState,action )=>{
+      switch (action.type){
+            case ADD_TODO:
+                  return {
+                        ...state,
+                        todos: [...state.todos, action.payload],
+                        };
 
+            case DELETE_TODO:
+                  return {
+                        ...state,
+                        todos: state.todos.filter((todo) => todo.id !==action.payload),
+                  };
+
+            case TOGGLE_STATUS_TODO:
+                  return {
+                        ...state,
+                        todos: state.todos.map((todo) =>{
+                              if (todo.id === action.payload) {
+                                    return {
+                                          ...todo,
+                                          isDone: !todo.isDone,
+                                    };
+                              } else {
+                                    return todo;
+                              }
+                        }),
+                  };
+
+            case GET_TODO_BY_ID:
+                  return {
+                        ...state,
+                        todo:state.todos.find (( todo) => {
+                              return todo.id === action.payload;
+                        }),
+                  };
+                  default: return state;
+      }
+}
 // export default reducer
 export default todos;

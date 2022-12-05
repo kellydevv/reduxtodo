@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const Layout = ({children}) => {
-      console.log(children);
       return <StLayout>{children}     
 </StLayout>
 }

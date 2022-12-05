@@ -1,6 +1,3 @@
-// src/redux/modules/config/configStore.js
-
-
 // 원래 있던 코드
 import { createStore } from "redux";
 import { combineReducers } from "redux";
@@ -9,7 +6,7 @@ import { combineReducers } from "redux";
 import todos from "../modules/todo";
 
 const rootReducer = combineReducers({
-  counter: todos, // <-- 새롭게 추가한 부분
+  todos: todos,
 });
 const store = createStore(rootReducer);
 
